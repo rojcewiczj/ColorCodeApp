@@ -99,23 +99,31 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Center(
-          child: Column(
+        padding: const EdgeInsets.only(top: 20.0, left: 30, right: 30),
+        child: Container(
+          child: ListView(
             children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
               Container(
-                height: 150,
+                height: 250,
                 width: 150,
                 color: color,
               ),
-              const Text(
-                'Color code:',
+              SizedBox(
+                height: 25,
+              ),
+              SizedBox(
+                height: 25,
               ),
               Text(
                 code,
-                style: Theme.of(context).textTheme.headline4,
+                style: TextStyle( fontSize: 55, color: color)
               ),
               const SizedBox(height: 30),
               SizedBox(
@@ -123,14 +131,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: TextField(
                   keyboardType: TextInputType.number,
                   controller: colorController,
-                  decoration: const InputDecoration(hintText: 'Color ID'),
+                    style: TextStyle(
+                        fontSize: 25.0,
+                        height: 2.0,
+                        color: Colors.black87
+                    ),
+                  decoration: const InputDecoration(hintText: 'COLOR ID',
+                  focusColor: Colors.black87, focusedBorder: UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4)), borderSide: BorderSide(width: 8,color: Colors.black12),
+              ),
+                    enabledBorder:UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4)), borderSide: BorderSide(width: 8,color: Colors.black12),
+                    ),),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 35),
               SizedBox(
                 width: 150,
+                height: 50,
                 child: ElevatedButton(
-                    child: const Text('Search'),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black87),
+                  ),
+                    child: const Text('Search', style: TextStyle( fontSize: 20),),
                     onPressed: () {
                       if (colorController.text.isEmpty) {
                         print("Empty");
