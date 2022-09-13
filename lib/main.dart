@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _getCode() async {
     final response = await http.get(Uri.parse(
-        'https://us-central1-beauty-by-me-4fc72.cloudfunctions.net/bbmExpress/api/colors/webSearch/shopifyData/${colorController.text}'));
+        'https://us-central1-beauty-by-me-4fc72.cloudfunctions.net/bbmExpress/api/webColors/webSearch/shopifyData/${colorController.text}'));
     final colorResponse = jsonDecode(response.body) as Map<String, dynamic>;
     print("response: $colorResponse");
     if (response.statusCode == 200) {
