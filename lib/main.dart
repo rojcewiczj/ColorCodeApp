@@ -2,8 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -56,6 +64,7 @@ class ColorModel {
 
 class _MyHomePageState extends State<MyHomePage> {
   String code = "";
+  String url = "";
   ColorModel currentColorModel =
       const ColorModel(colorCode: "", hue: 0, saturation: 0, value: 0);
   Color color = Colors.transparent;
@@ -67,11 +76,23 @@ class _MyHomePageState extends State<MyHomePage> {
         .toColor();
   }
 
+  Future<void> _getUrl() async {
+    final ref = FirebaseFirestore.instance;
+
+    CollectionReference collection = await ref.collection("urls");
+    DocumentSnapshot snapshot =
+        await collection.doc('IiEWdMyCEW519nhsdqPy').get();
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+    url = data['url'];
+  }
+
   Future<void> _getCode() async {
-    final response = await http.get(Uri.parse(
-        'https://us-central1-beauty-by-me-4fc72.cloudfunctions.net/bbmExpress/api/webColors/webSearch/shopifyData/${colorController.text}'));
+    final parsedUrl = Uri.parse('$url/${colorController.text}');
+
+    final response = await http.get(parsedUrl);
     final colorResponse = jsonDecode(response.body) as Map<String, dynamic>;
-    print("response: $colorResponse");
+
     if (response.statusCode == 200) {
       currentColorModel = ColorModel.fromJson(colorResponse);
       setState(() {
@@ -89,8 +110,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    _getUrl();
+
+    super.initState();
+  }
+
+  @override
   void dispose() {
     colorController.dispose();
+
     super.dispose();
   }
 
@@ -121,26 +150,27 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: 25,
               ),
-              Text(
-                code,
-                style: TextStyle( fontSize: 55, color: color)
-              ),
+              Text(code, style: TextStyle(fontSize: 55, color: color)),
               const SizedBox(height: 30),
               SizedBox(
                 width: 200,
                 child: TextField(
                   keyboardType: TextInputType.number,
                   controller: colorController,
-                    style: TextStyle(
-                        fontSize: 25.0,
-                        height: 2.0,
-                        color: Colors.black87
+                  style: TextStyle(
+                      fontSize: 25.0, height: 2.0, color: Colors.black87),
+                  decoration: const InputDecoration(
+                    hintText: 'COLOR ID',
+                    focusColor: Colors.black87,
+                    focusedBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      borderSide: BorderSide(width: 8, color: Colors.black12),
                     ),
-                  decoration: const InputDecoration(hintText: 'COLOR ID',
-                  focusColor: Colors.black87, focusedBorder: UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4)), borderSide: BorderSide(width: 8,color: Colors.black12),
-              ),
-                    enabledBorder:UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(4)), borderSide: BorderSide(width: 8,color: Colors.black12),
-                    ),),
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      borderSide: BorderSide(width: 8, color: Colors.black12),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 35),
@@ -148,10 +178,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 150,
                 height: 50,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.black87),
-                  ),
-                    child: const Text('Search', style: TextStyle( fontSize: 20),),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.black87),
+                    ),
+                    child: const Text(
+                      'Search',
+                      style: TextStyle(fontSize: 20),
+                    ),
                     onPressed: () {
                       if (colorController.text.isEmpty) {
                         print("Empty");

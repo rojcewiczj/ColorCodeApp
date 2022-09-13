@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "991201745530",
+    "project_id": "colorcodesapp",
+    "storage_bucket": "colorcodesapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991201745530:android:3e78433359ccd987a879c3",
+        "android_client_info": {
+          "package_name": "com.example.color_code_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991201745530-4areom49pbtfovaj5p99hb1gn91pus47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBK96khmdTnjWXnD1dbvNeFxweeAj4GiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991201745530-4areom49pbtfovaj5p99hb1gn91pus47.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "991201745530-0nna9hqej81s96ivc8cpqq70vu5burft.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.colorCodeApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
